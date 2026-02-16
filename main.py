@@ -53,7 +53,6 @@ async def ingest(data: DetectionCreate, db: Session = Depends(get_db)):
 async def get_stats(
     from_dt: Optional[str] = Query(None, alias="from"),
     to_dt: Optional[str] = Query(None, alias="to"),
-    zone: Optional[str] = None,
     db: Session = Depends(get_db)
 ):
     query = db.query(Detection)
@@ -62,9 +61,6 @@ async def get_stats(
         query = query.filter(Detection.timestamp >= datetime.fromisoformat(from_dt))
     if to_dt:
         query = query.filter(Detection.timestamp <= datetime.fromisoformat(to_dt))
-    if zone:
-        query = query.filter(Detection.zone == zone)
-
     results = query.all()
 
     # 타입별 카운트
