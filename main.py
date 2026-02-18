@@ -8,7 +8,7 @@ from datetime import datetime, timedelta # timedelta는 시간 간격 계산에 
 from typing import Optional # 값이 있을 수도 없을 수도 있는 파라미터에 사용
 import asyncio # 비동기 처리 라이브러리
 import json #  딕셔너리를 JSON 문자열로 변환
-import random #  랜덤 값 생성. 더미 데이터 만들 때 써요
+import random #  랜덤 값 생성. 더미 데이터 만들 때 사용
 from uuid import uuid4 # 고유 ID 자동 생성
 from httpx import AsyncClient # FastAPI 앱 내부에서 HTTP 요청 보내는 라이브러리.
 from fastapi.middleware.cors import CORSMiddleware # CORS 설정을 위한 미들웨어
@@ -62,7 +62,6 @@ async def get_stats(
     if to_dt:
         query = query.filter(Detection.timestamp <= datetime.fromisoformat(to_dt))
     results = query.all()
-
     # 타입별 카운트
     type_counts = {"Pedestrian": 0, "Bike": 0, "Vehicle": 0, "LargeVehicle": 0}
     speed_by_type = {"Pedestrian": [], "Bike": [], "Vehicle": [], "LargeVehicle": []}
@@ -119,7 +118,7 @@ async def generate_dummy_data():
         await asyncio.sleep(10)
         
         data = DetectionCreate(
-            timestamp=datetime.utcnow(),
+            timestamp=datetime.now(),
             zone=random.choice(["A구역", "B구역", "C구역"]),
             objects=[
                 ObjectItem(
